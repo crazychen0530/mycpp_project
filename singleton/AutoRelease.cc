@@ -42,10 +42,28 @@ public:
 };
 Singleton* Singleton::instancep = nullptr;
 
+class AutoRelease{
+public: 
+    AutoRelease(Singleton* p):_p(p){
+        cout<<"AutoRelease(Singleton)"<<endl;
+    }
+
+    ~AutoRelease(){
+        cout<<"~AutoRelease"<<endl;
+        if(_p){
+            delete _p;
+            _p = nullptr;
+        }
+    }
+private:
+    Singleton* _p;
+};
+
 void test1(){
     //单例模式的规范写法
-    Singleton::getInstance();
+    AutoRelease autorelease(Singleton::getInstance());
 }
 int main(){
+    test1();
     return 0;
 }
